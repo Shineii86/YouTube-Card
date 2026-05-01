@@ -1,17 +1,13 @@
 /**
- * Telegram Card
+ * YouTube Card
  * A lightweight and efficient web scraping utility designed to generate
- * clean, dynamic preview cards for Telegram profiles, channels, groups, and bots.
+ * clean, dynamic preview cards for YouTube channels.
  *
- * Repository: https://github.com/Shineii86/Telegram-Card
- *
- * This project is built to help developers seamlessly showcase Telegram
- * communities and bots with visually structured metadata, making it ideal
- * for integration into GitHub profiles, portfolio websites, and personal projects.
+ * Repository: https://github.com/Shineii86/YouTube-Card
  *
  * This module contains a simple in-memory cache.
  *
- * Author:Shinei Nouzen
+ * Author: Shinei Nouzen
  *
  * Copyright (c) 2026 Shinei Nouzen
  *
