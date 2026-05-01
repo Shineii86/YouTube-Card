@@ -61,7 +61,7 @@ function extractMetaContent(html: string, property: string): string | null {
 
 function extractSubscriberCount(html: string): string | null {
     // Try to extract from ytInitialData JSON
-    const ytDataMatch = html.match(/var\s+ytInitialData\s*=\s*(\{.*?\});\s*<\/script>/s);
+    const ytDataMatch = html.match(/var\s+ytInitialData\s*=\s*(\{[\s\S]*?\});\s*<\/script>/);
     if (ytDataMatch) {
         try {
             const data = JSON.parse(ytDataMatch[1]);
@@ -118,7 +118,7 @@ function extractDescription(html: string): string | null {
     if (ogDesc) return ogDesc;
 
     // Try from ytInitialData
-    const ytDataMatch = html.match(/var\s+ytInitialData\s*=\s*(\{.*?\});\s*<\/script>/s);
+    const ytDataMatch = html.match(/var\s+ytInitialData\s*=\s*(\{[\s\S]*?\});\s*<\/script>/);
     if (ytDataMatch) {
         try {
             const data = JSON.parse(ytDataMatch[1]);
@@ -147,7 +147,7 @@ function extractChannelImage(html: string): string | null {
     if (ogImage && ogImage.includes('yt')) return ogImage;
 
     // Try from ytInitialData
-    const ytDataMatch = html.match(/var\s+ytInitialData\s*=\s*(\{.*?\});\s*<\/script>/s);
+    const ytDataMatch = html.match(/var\s+ytInitialData\s*=\s*(\{[\s\S]*?\});\s*<\/script>/);
     if (ytDataMatch) {
         try {
             const data = JSON.parse(ytDataMatch[1]);
@@ -194,7 +194,7 @@ function extractTitle(html: string): string | null {
     if (ogTitle) return ogTitle;
 
     // Try from ytInitialData
-    const ytDataMatch = html.match(/var\s+ytInitialData\s*=\s*(\{.*?\});\s*<\/script>/s);
+    const ytDataMatch = html.match(/var\s+ytInitialData\s*=\s*(\{[\s\S]*?\});\s*<\/script>/);
     if (ytDataMatch) {
         try {
             const data = JSON.parse(ytDataMatch[1]);
