@@ -7,7 +7,7 @@
  *
  * This server-side utility scrapes information from YouTube's public channel
  * pages to extract channel metadata including name, avatar, subscriber count,
- * description, and verification status.
+ * video count, description, and verification status.
  *
  * Author: Shinei Nouzen
  *
@@ -30,7 +30,7 @@ interface ScrapeResult {
     username: string;
     description: string | null;
     image: string;
-    extra: string | null;
+    subscriberCount: string | null;
     videoCount: string | null;
     isVerified: boolean;
 }
@@ -129,28 +129,6 @@ function extractVideoCount(html: string): string | null {
                     }
                 }
             }
-
-            // Try header metadata
-            const header = data?.header?.c4TabbedHeaderRenderer || data?.header?.pageHeaderRenderer;
-            if (header) {
-                // Look for video count in tabs
-                const headerTabs = header?.tabs;
-                if (headerTabs) {
-                    for (const tab of headerTabs) {
-                        const tabRenderer = tab?.tabRenderer;
-                        if (tabRenderer?.title?.includes('Videos')) {
-                            // Sometimes the tab itself has a count
-                        }
-                    }
-                }
-            }
-
-            // Try metadata section
-            const metadataObj = data?.metadata?.channelMetadataRenderer;
-            if (metadataObj?.vanityChannelUrl) {
-                // We have metadata but not video count directly
-            }
-
         } catch {
             // JSON parse failed
         }
@@ -206,7 +184,6 @@ function extractDescription(html: string): string | null {
 
 function extractVerifiedStatus(html: string): boolean {
     // Check for verified badge indicators in the HTML
-    // YouTube uses various indicators for verification
     return html.includes('"isVerified":true') ||
            html.includes('"badges":[{"metadataBadgeRenderer"') ||
            html.includes('verified') && html.includes('checkmark') ||
@@ -304,17 +281,13 @@ async function scrapeAndCache(username: string): Promise<ScrapeResult> {
             throw new YouTubeScrapeError('Could not parse essential data from the YouTube page.');
         }
 
-        // Build extra: "1.2M subscribers · 500 videos"
-        const extraParts = [subscriberCount, videoCount].filter(Boolean);
-        const extra = extraParts.length > 0 ? extraParts.join(' · ') : null;
-
         const result: ScrapeResult = {
             type: isVerified ? SourceType.VerifiedChannel : SourceType.Channel,
             title,
             username: cleanUsername,
             description,
             image: image || `https://ui-avatars.com/api/?name=${encodeURIComponent(title)}&background=FF0000&color=fff&size=256`,
-            extra,
+            subscriberCount: subscriberCount || null,
             videoCount: videoCount || null,
             isVerified,
         };

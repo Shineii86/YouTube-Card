@@ -22,10 +22,3 @@ export class ChannelNotFoundError extends YouTubeScrapeError {
         this.name = 'ChannelNotFoundError';
     }
 }
-
-export class VideoNotFoundError extends YouTubeScrapeError {
-    constructor(videoId: string) {
-        super(`YouTube video "${videoId}" not found.`);
-        this.name = 'VideoNotFoundError';
-    }
-}
