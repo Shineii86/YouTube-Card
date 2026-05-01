@@ -5,10 +5,10 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
    <!-- Primary Meta Tags -->
-   <title>YouTube Card Generator - Beautiful Dynamic Cards for YouTube Channels</title>
-   <meta name="title" content="YouTube Card Generator - Beautiful Dynamic Cards for YouTube Channels">
-   <meta name="description" content="Generate stunning, customizable cards for YouTube channels. Perfect for GitHub READMEs, websites, and social media. Free OG image generator with dark/light themes and custom colors.">
-   <meta name="keywords" content="youtube card, youtube channel card, youtube profile card, github readme, og image generator, social media cards, youtube badge, channel badge, profile badge">
+   <title>YouTube Card Generator - Beautiful Dynamic Cards for YouTube Channels & Videos</title>
+   <meta name="title" content="YouTube Card Generator - Beautiful Dynamic Cards for YouTube Channels & Videos">
+   <meta name="description" content="Generate stunning, customizable cards for YouTube channels and videos. Perfect for GitHub READMEs, websites, and social media. Free OG image generator with dark/light themes and custom colors.">
+   <meta name="keywords" content="youtube card, youtube channel card, youtube video card, youtube profile card, github readme, og image generator, social media cards, youtube badge, channel badge, video badge">
    <meta name="author" content="Shinei Nouzen">
    <meta name="robots" content="index, follow">
    <link rel="canonical" href="https://youtubecard.vercel.app/">
@@ -16,8 +16,8 @@
    <!-- Open Graph / Facebook -->
    <meta property="og:type" content="website">
    <meta property="og:url" content="https://youtubecard.vercel.app/">
-   <meta property="og:title" content="YouTube Card Generator - Beautiful Dynamic Cards for YouTube Channels">
-   <meta property="og:description" content="Generate stunning, customizable cards for YouTube channels. Perfect for GitHub READMEs, websites, and social media.">
+   <meta property="og:title" content="YouTube Card Generator - Beautiful Dynamic Cards for YouTube Channels & Videos">
+   <meta property="og:description" content="Generate stunning, customizable cards for YouTube channels and videos. Perfect for GitHub READMEs, websites, and social media.">
    <meta property="og:image" content="https://youtubecard.vercel.app/og.png">
    <meta property="og:image:width" content="700">
    <meta property="og:image:height" content="250">
@@ -1002,6 +1002,14 @@
                font-size: 0.8rem;
            }
        }
+       /* Mode Tabs */
+       .mode-tabs { display: flex; gap: 0.75rem; margin-bottom: 1.5rem; background: var(--bg-soft); padding: 6px; border-radius: 16px; }
+       .mode-tab { flex: 1; padding: 0.75rem 1.25rem; border: none; border-radius: 12px; background: transparent; cursor: pointer; font-size: 0.95rem; font-weight: 700; color: var(--text-secondary); font-family: 'M PLUS Rounded 1c', sans-serif; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+       .mode-tab:hover { color: var(--primary); background: rgba(255,0,0,0.05); }
+       .mode-tab.active { background: var(--white); color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+       .mode-tab i { font-size: 1rem; }
+       .mode-content { display: none; }
+       .mode-content.active { display: block; }
    </style>
 <base target="_blank">
 </head>
@@ -1020,7 +1028,7 @@
            <div class="hero-badge-float">⚡ Fast</div>
 
            <h1><span class="highlight">YouTube</span> Card Generator</h1>
-           <p class="subtitle">Create stunning, customizable cards for YouTube channels. Powered by Next.js OG Image API for lightning-fast generation.</p>
+           <p class="subtitle">Create stunning, customizable cards for YouTube channels and videos. Powered by Next.js OG Image API for lightning-fast generation.</p>
            <div class="hero-badges">
                <span class="hero-badge"><i class="fas fa-bolt"></i> Lightning Fast</span>
                <span class="hero-badge"><i class="fas fa-code"></i> Developer Friendly</span>
@@ -1033,9 +1041,30 @@
                <i class="fas fa-wand-magic-sparkles"></i> Generate Your Card
            </h2>
 
-           <div class="form-group">
-               <label for="username">YouTube Channel Username *</label>
-               <input type="text" id="username" placeholder="e.g., MrBeast, PewDiePie, MKBHD" required>
+           <!-- Mode Tabs -->
+           <div class="mode-tabs">
+               <button class="mode-tab active" data-mode="channel" onclick="switchMode('channel')">
+                   <i class="fas fa-tv"></i> Channel Card
+               </button>
+               <button class="mode-tab" data-mode="video" onclick="switchMode('video')">
+                   <i class="fas fa-play"></i> Video Card
+               </button>
+           </div>
+
+           <!-- Channel Mode -->
+           <div id="channel-mode" class="mode-content active">
+               <div class="form-group">
+                   <label for="username">YouTube Channel Username *</label>
+                   <input type="text" id="username" placeholder="e.g., MrBeast, PewDiePie, MKBHD" required>
+               </div>
+           </div>
+
+           <!-- Video Mode -->
+           <div id="video-mode" class="mode-content">
+               <div class="form-group">
+                   <label for="videoId">YouTube Video ID or URL *</label>
+                   <input type="text" id="videoId" placeholder="e.g., dQw4w9WgXcQ or https://youtube.com/watch?v=dQw4w9WgXcQ">
+               </div>
            </div>
 
            <div class="form-group">
@@ -1138,7 +1167,7 @@
        </div>
 
        <div class="examples">
-           <h2><i class="fas fa-images"></i> Examples</h2>
+           <h2><i class="fas fa-images"></i> Channel Examples</h2>
            <div class="example-grid">
                <div class="example-item">
                    <img src="/?username=MrBeast&theme=light&random" alt="MrBeast Light Theme">
@@ -1173,6 +1202,42 @@
            </div>
        </div>
 
+       <div class="examples">
+           <h2><i class="fas fa-play-circle"></i> Video Examples</h2>
+           <div class="example-grid">
+               <div class="example-item">
+                   <img src="/?video=dQw4w9WgXcQ&theme=light&random" alt="Rick Astley - Never Gonna Give You Up">
+                   <h4>Music Video - Light Theme</h4>
+                   <p>dQw4w9WgXcQ</p>
+               </div>
+               <div class="example-item">
+                   <img src="/?video=9bZkp7q19f0&theme=dark&random" alt="PSY - GANGNAM STYLE">
+                   <h4>Most Viewed - Dark Theme</h4>
+                   <p>9bZkp7q19f0</p>
+               </div>
+               <div class="example-item">
+                   <img src="/?video=jNQXAC9IVRw&theme=light&random" alt="Me at the zoo">
+                   <h4>First YouTube Video</h4>
+                   <p>jNQXAC9IVRw</p>
+               </div>
+               <div class="example-item">
+                   <img src="/?video=kJQP7kiw5Fk&theme=dark&random" alt="Luis Fonsi - Despacito">
+                   <h4>Latin Pop - Dark Theme</h4>
+                   <p>kJQP7kiw5Fk</p>
+               </div>
+               <div class="example-item">
+                   <img src="/?video=ScMzIvxBSi4&theme=light&random" alt="MrBeast Video">
+                   <h4>MrBeast Video - Light</h4>
+                   <p>ScMzIvxBSi4</p>
+               </div>
+               <div class="example-item">
+                   <img src="/?video=dQw4w9WgXcQ&bgColor=rgba(15,15,15,1)&textColor=%23FFFFFF&subtleTextColor=%23AAAAAA&extraColor=%23FF4E45&shadowColor=rgba(255,78,69,0.2)&fontFamily=system-ui&random" alt="Custom Theme Video">
+                   <h4>Custom Theme - Video</h4>
+                   <p>dQw4w9WgXcQ</p>
+               </div>
+           </div>
+       </div>
+
        <div class="features">
            <div class="feature">
                <div class="feature-icon"><i class="fas fa-palette"></i></div>
@@ -1186,8 +1251,8 @@
            </div>
            <div class="feature">
                <div class="feature-icon"><i class="fab fa-youtube"></i></div>
-               <h3>YouTube Integration</h3>
-               <p>Automatically fetches channel name, avatar, subscriber count, and verification status. Works with any public YouTube channel.</p>
+               <h3>Channels & Videos</h3>
+               <p>Works with YouTube channels AND individual videos. Automatically fetches names, avatars, thumbnails, subscriber counts, view counts, and verification status.</p>
            </div>
            <div class="feature">
                <div class="feature-icon"><i class="fas fa-link"></i></div>
@@ -1209,9 +1274,13 @@
        <div class="usage">
            <h2><i class="fas fa-book"></i> Usage Guide & API Documentation</h2>
 
-           <h3><i class="fas fa-terminal"></i> Basic Usage</h3>
+           <h3><i class="fas fa-terminal"></i> Channel Card</h3>
            <p>Simply add a YouTube channel username to generate a card:</p>
            <div class="code-block">https://youtubecard.vercel.app/?username=MrBeast</div>
+
+           <h3><i class="fas fa-play"></i> Video Card</h3>
+           <p>Generate a card for any YouTube video using its ID or URL:</p>
+           <div class="code-block">https://youtubecard.vercel.app/?video=dQw4w9WgXcQ</div>
 
            <h3><i class="fas fa-moon"></i> With Theme</h3>
            <p>Choose between light and dark themes:</p>
@@ -1220,8 +1289,8 @@
            <h3><i class="fab fa-github"></i> GitHub README Integration</h3>
            <p>Perfect for showcasing your YouTube presence in README files:</p>
            <div class="code-block">&lt;img src="https://youtubecard.vercel.app/?username=MrBeast" alt="@MrBeast" style="width: 300px;" /&gt;</div>
-           <p>Or using Markdown:</p>
-           <div class="code-block">![MrBeast](https://youtubecard.vercel.app/?username=MrBeast)</div>
+           <p>Or video cards:</p>
+           <div class="code-block">![Video](https://youtubecard.vercel.app/?video=dQw4w9WgXcQ)</div>
 
            <h3><i class="fas fa-sliders"></i> Advanced Customization</h3>
            <p>Customize colors, fonts, and shadows to match your brand:</p>
@@ -1230,12 +1299,13 @@
            <h3><i class="fas fa-list"></i> Available Parameters</h3>
            <p>Customize your cards with these URL parameters:</p>
            <ul style="margin: 1rem 0; padding-left: 2rem; color: var(--text-secondary);">
-               <li style="margin-bottom: 0.5rem;"><strong style="color: var(--primary);">username</strong> - YouTube channel username (required)</li>
+               <li style="margin-bottom: 0.5rem;"><strong style="color: var(--primary);">username</strong> - YouTube channel username (for channel cards)</li>
+               <li style="margin-bottom: 0.5rem;"><strong style="color: var(--primary);">video</strong> - YouTube video ID (for video cards)</li>
                <li style="margin-bottom: 0.5rem;"><strong style="color: var(--primary);">theme</strong> - light or dark</li>
                <li style="margin-bottom: 0.5rem;"><strong style="color: var(--primary);">bgColor</strong> - Background color (rgba or hex)</li>
                <li style="margin-bottom: 0.5rem;"><strong style="color: var(--primary);">textColor</strong> - Main text color</li>
                <li style="margin-bottom: 0.5rem;"><strong style="color: var(--primary);">subtleTextColor</strong> - Secondary text color</li>
-               <li style="margin-bottom: 0.5rem;"><strong style="color: var(--primary);">extraColor</strong> - Accent color for subscriber count</li>
+               <li style="margin-bottom: 0.5rem;"><strong style="color: var(--primary);">extraColor</strong> - Accent color for subscriber/view count</li>
                <li style="margin-bottom: 0.5rem;"><strong style="color: var(--primary);">shadowColor</strong> - Box shadow color</li>
                <li style="margin-bottom: 0.5rem;"><strong style="color: var(--primary);">fontFamily</strong> - Font family name</li>
            </ul>
@@ -1243,10 +1313,10 @@
            <h3><i class="fas fa-lightbulb"></i> Use Cases</h3>
            <ul style="margin: 1rem 0; padding-left: 2rem; color: var(--text-secondary);">
                <li style="margin-bottom: 0.5rem;">GitHub Profile README Showcases</li>
-               <li style="margin-bottom: 0.5rem;">Personal Website Integration</li>
+               <li style="margin-bottom: 0.5rem;">Video Portfolio Displays</li>
                <li style="margin-bottom: 0.5rem;">Social Media Profile Links</li>
                <li style="margin-bottom: 0.5rem;">Developer Portfolio Displays</li>
-               <li style="margin-bottom: 0.5rem;">Channel Promotion Materials</li>
+               <li style="margin-bottom: 0.5rem;">Channel & Video Promotion Materials</li>
                <li style="margin-bottom: 0.5rem;">Content Creator Documentation</li>
            </ul>
 
@@ -1365,21 +1435,63 @@
            }
        }
 
-       function generateCard() {
-           const username = document.getElementById('username').value.trim();
-           if (!username) {
-               const input = document.getElementById('username');
-               input.style.borderColor = '#ef4444';
-               input.style.animation = 'shake 0.5s';
-               setTimeout(() => { input.style.borderColor = ''; input.style.animation = ''; }, 500);
-               const style = document.createElement('style');
-               style.textContent = `@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }`;
-               document.head.appendChild(style);
-               return;
-           }
+       // Mode switching
+       let currentMode = 'channel';
 
+       function switchMode(mode) {
+           currentMode = mode;
+           document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+           document.querySelector(`.mode-tab[data-mode="${mode}"]`).classList.add('active');
+           document.querySelectorAll('.mode-content').forEach(c => c.classList.remove('active'));
+           document.getElementById(`${mode}-mode`).classList.add('active');
+       }
+
+       function extractVideoId(input) {
+           input = input.trim();
+           // Full URL: https://www.youtube.com/watch?v=VIDEO_ID
+           let match = input.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
+           if (match) return match[1];
+           // Short URL: https://youtu.be/VIDEO_ID
+           match = input.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/);
+           if (match) return match[1];
+           // Embed URL: https://www.youtube.com/embed/VIDEO_ID
+           match = input.match(/youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/);
+           if (match) return match[1];
+           // Assume it's already a video ID
+           if (/^[a-zA-Z0-9_-]{11}$/.test(input)) return input;
+           return input;
+       }
+
+       function generateCard() {
            const params = new URLSearchParams();
-           params.append('username', username);
+
+           if (currentMode === 'video') {
+               const rawVideo = document.getElementById('videoId').value.trim();
+               if (!rawVideo) {
+                   const input = document.getElementById('videoId');
+                   input.style.borderColor = '#ef4444';
+                   input.style.animation = 'shake 0.5s';
+                   setTimeout(() => { input.style.borderColor = ''; input.style.animation = ''; }, 500);
+                   const style = document.createElement('style');
+                   style.textContent = '@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }';
+                   document.head.appendChild(style);
+                   return;
+               }
+               params.append('video', extractVideoId(rawVideo));
+           } else {
+               const username = document.getElementById('username').value.trim();
+               if (!username) {
+                   const input = document.getElementById('username');
+                   input.style.borderColor = '#ef4444';
+                   input.style.animation = 'shake 0.5s';
+                   setTimeout(() => { input.style.borderColor = ''; input.style.animation = ''; }, 500);
+                   const style = document.createElement('style');
+                   style.textContent = '@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }';
+                   document.head.appendChild(style);
+                   return;
+               }
+               params.append('username', username);
+           }
 
            const activePreset = document.querySelector('.theme-preset.active').dataset.preset;
            if (activePreset !== 'custom' && themePresets[activePreset]) {
@@ -1396,13 +1508,10 @@
 
            const baseUrl = window.location.origin;
            const cardUrl = `${baseUrl}/?${params.toString()}`;
-           const previewSection = document.getElementById('preview-section');
-           const previewImage = document.getElementById('preview-image');
-           const urlInput = document.getElementById('generated-url');
-           previewImage.src = cardUrl + '&t=' + Date.now();
-           urlInput.value = cardUrl;
-           previewSection.classList.add('show');
-           previewSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+           document.getElementById('preview-image').src = cardUrl + '&t=' + Date.now();
+           document.getElementById('generated-url').value = cardUrl;
+           document.getElementById('preview-section').classList.add('show');
+           document.getElementById('preview-section').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
        }
 
        function copyUrl() {
@@ -1422,6 +1531,9 @@
        }
 
        document.getElementById('username').addEventListener('keypress', function(e) {
+           if (e.key === 'Enter') generateCard();
+       });
+       document.getElementById('videoId').addEventListener('keypress', function(e) {
            if (e.key === 'Enter') generateCard();
        });
 

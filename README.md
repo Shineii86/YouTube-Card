@@ -4,7 +4,7 @@
 
 # YouTube Card Widget
 
-**Beautiful, dynamic Open Graph cards for YouTube channels**
+**Beautiful, dynamic Open Graph cards for YouTube channels & videos**
 
 ![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?logo=typescript)
@@ -36,9 +36,9 @@
 
 ## 🌟 Overview
 
-YouTube Card Widget is a high-performance, serverless solution for generating dynamic Open Graph images for YouTube channels. Built with modern web technologies and deployed on the edge, it provides real-time card generation with sub-second response times.
+YouTube Card Widget is a high-performance, serverless solution for generating dynamic Open Graph images for YouTube channels and videos. Built with modern web technologies and deployed on the edge, it provides real-time card generation with sub-second response times.
 
-The widget scrapes YouTube's public channel pages to fetch metadata and generates optimized SVG/PNG cards using Vercel's Edge Functions and the Satori rendering engine.
+The widget scrapes YouTube's public pages to fetch metadata and generates optimized PNG cards using Vercel's Edge Functions and the Satori rendering engine.
 
 ## ✨ Features
 
@@ -47,8 +47,8 @@ The widget scrapes YouTube's public channel pages to fetch metadata and generate
 | ⚡ Edge-Powered | Sub-100ms response times via Vercel Edge Network |
 | 🎨 Theming | Native dark/light modes + full CSS custom properties support |
 | 📱 Responsive | Optimized rendering for GitHub, Twitter, LinkedIn, and web embeds |
-| 🔍 Auto-Detection | Automatically fetches channel name, avatar, and subscriber count |
-| 📊 Real-time Metrics | Displays subscriber counts and verification status |
+| 🔍 Auto-Detection | Automatically fetches channel/video name, avatar, thumbnail, and stats |
+| 📊 Real-time Metrics | Displays subscriber counts, view counts, like counts, and verification |
 | 🖼️ OG Image Ready | Perfect Open Graph metadata for social sharing |
 | 🔒 Privacy First | No data persistence; ephemeral request processing |
 | 🌍 Global CDN | 100+ edge locations worldwide |
@@ -68,6 +68,12 @@ Generate a card by providing a YouTube channel username:
 
 ```
 https://youtubecard.vercel.app/?username=MrBeast
+```
+
+Generate a video card with a video ID:
+
+```
+https://youtubecard.vercel.app/?video=dQw4w9WgXcQ
 ```
 
 Append the theme parameter for predefined styles:
@@ -104,7 +110,8 @@ GET /
 
 | Parameter | Type | Required | Default | Description |
 |-----------|------|----------|---------|-------------|
-| `username` | string | ✅ | - | YouTube channel username (without @) |
+| `username` | string | ✅* | - | YouTube channel username (for channel cards) |
+| `video` | string | ✅* | - | YouTube video ID or URL (for video cards) |
 | `theme` | string | ❌ | `light` | Predefined theme: `light`, `dark` |
 | `bgColor` | string | ❌ | Theme-based | Background color (CSS color value) |
 | `textColor` | string | ❌ | Theme-based | Primary text color |
@@ -112,6 +119,8 @@ GET /
 | `extraColor` | string | ❌ | Theme-based | Accent/highlight color |
 | `shadowColor` | string | ❌ | Theme-based | Card shadow color |
 | `fontFamily` | string | ❌ | `system-ui` | Font stack (CSS font-family) |
+
+*Use either `username` or `video` — not both.
 
 ### Color Formats
 
