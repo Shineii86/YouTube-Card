@@ -11,8 +11,6 @@
  * Released under the MIT License.
  */
 
-'use server';
-
 import { YouTubeScrapeError, VideoNotFoundError } from './errors';
 import { get, set } from './cache';
 

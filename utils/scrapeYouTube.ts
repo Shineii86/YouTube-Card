@@ -18,8 +18,6 @@
  * with the terms of the license.
  */
 
-'use server';
-
 import { YouTubeScrapeError, ChannelNotFoundError } from './errors';
 import { SourceType } from '@/types/enums';
 import { get, set } from './cache';

@@ -13,8 +13,6 @@
  * Released under the MIT License.
  */
 
-'use server';
-
 import { NextRequest } from 'next/server'
 import { ImageResponse } from 'next/og';
 import scrapeYouTube from "@/utils/scrapeYouTube";
