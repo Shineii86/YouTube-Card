@@ -33,6 +33,7 @@ interface ScrapeResult {
     description: string | null;
     image: string;
     extra: string | null;
+    videoCount: string | null;
     isVerified: boolean;
 }
 
@@ -105,6 +106,79 @@ function extractSubscriberCount(html: string): string | null {
     ];
 
     for (const pattern of subPatterns) {
+        const match = html.match(pattern);
+        if (match) return match[1];
+    }
+
+    return null;
+}
+
+function extractVideoCount(html: string): string | null {
+    // Try from ytInitialData JSON
+    const ytDataMatch = html.match(/var\s+ytInitialData\s*=\s*(\{[\s\S]*?\});\s*<\/script>/);
+    if (ytDataMatch) {
+        try {
+            const data = JSON.parse(ytDataMatch[1]);
+
+            // c4TabbedHeaderRenderer path - tabs contain video count
+            const tabs = data?.contents?.twoColumnBrowseResultsRenderer?.tabs;
+            if (tabs) {
+                for (const tab of tabs) {
+                    const tabRenderer = tab?.tabRenderer;
+                    if (tabRenderer?.title === 'Videos' || tabRenderer?.selected) {
+                        const content = tabRenderer?.content?.sectionListRenderer?.contents?.[0]?.itemSectionRenderer?.contents?.[0]?.gridRenderer?.header?.gridHeaderRenderer?.title?.runs?.[0]?.text;
+                        if (content && /\d/.test(content)) return content;
+                    }
+                }
+            }
+
+            // Try header metadata
+            const header = data?.header?.c4TabbedHeaderRenderer || data?.header?.pageHeaderRenderer;
+            if (header) {
+                // Look for video count in tabs
+                const headerTabs = header?.tabs;
+                if (headerTabs) {
+                    for (const tab of headerTabs) {
+                        const tabRenderer = tab?.tabRenderer;
+                        if (tabRenderer?.title?.includes('Videos')) {
+                            // Sometimes the tab itself has a count
+                        }
+                    }
+                }
+            }
+
+            // Try metadata section
+            const metadataObj = data?.metadata?.channelMetadataRenderer;
+            if (metadataObj?.vanityChannelUrl) {
+                // We have metadata but not video count directly
+            }
+
+        } catch {
+            // JSON parse failed
+        }
+    }
+
+    // Try from meta description - YouTube often has "X videos" in description
+    const desc = extractMetaContent(html, 'description');
+    if (desc) {
+        const videoMatch = desc.match(/([\d,.]+[KkMmBb]?)\s*videos?\b/i);
+        if (videoMatch) return `${videoMatch[1]} videos`;
+    }
+
+    // Try og:description
+    const ogDesc = extractMetaContent(html, 'og:description');
+    if (ogDesc) {
+        const videoMatch = ogDesc.match(/([\d,.]+[KkMmBb]?)\s*videos?\b/i);
+        if (videoMatch) return `${videoMatch[1]} videos`;
+    }
+
+    // Try raw HTML patterns
+    const patterns = [
+        /"videoCountText"\s*:\s*\{[^}]*"simpleText"\s*:\s*"([^"]+)"/,
+        /"videoCountText"\s*:\s*\{[^}]*"runs"\s*:\s*\[\{[^}]*"text"\s*:\s*"([^"]+)"/,
+    ];
+
+    for (const pattern of patterns) {
         const match = html.match(pattern);
         if (match) return match[1];
     }
@@ -225,11 +299,16 @@ async function scrapeAndCache(username: string): Promise<ScrapeResult> {
         const image = extractChannelImage(html);
         const description = extractDescription(html);
         const subscriberCount = extractSubscriberCount(html);
+        const videoCount = extractVideoCount(html);
         const isVerified = extractVerifiedStatus(html);
 
         if (!title) {
             throw new YouTubeScrapeError('Could not parse essential data from the YouTube page.');
         }
+
+        // Build extra: "1.2M subscribers · 500 videos"
+        const extraParts = [subscriberCount, videoCount].filter(Boolean);
+        const extra = extraParts.length > 0 ? extraParts.join(' · ') : null;
 
         const result: ScrapeResult = {
             type: isVerified ? SourceType.VerifiedChannel : SourceType.Channel,
@@ -237,7 +316,8 @@ async function scrapeAndCache(username: string): Promise<ScrapeResult> {
             username: cleanUsername,
             description,
             image: image || `https://ui-avatars.com/api/?name=${encodeURIComponent(title)}&background=FF0000&color=fff&size=256`,
-            extra: subscriberCount || null,
+            extra,
+            videoCount: videoCount || null,
             isVerified,
         };
 
